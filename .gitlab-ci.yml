@@ -2,13 +2,24 @@ stages:
   - build
   - test
   - deploy
-build_job: stage: build script:
+
+build_job:
+  stage: build
+  script:
     - echo 'Building'
-test_unit_job: stage: test script:
+
+test_unit_job:
+  stage: test
+  script:
     - echo 'Unit Testing 1'
-test_integration_job: stage: test
-script:
+
+test_integration_job:
+  stage: test
+  script:
     - echo 'Integration Testing 2'
-deploy_job: stage: deploy script:
+
+deploy_job:
+  stage: deploy
+  script:
     - echo 'Deploy'
 
