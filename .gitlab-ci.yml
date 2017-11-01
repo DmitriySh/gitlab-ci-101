@@ -1,7 +1,7 @@
 stages:
   - build
   - test
-  - deploy
+  - review
 
 build_job:
   stage: build
@@ -19,7 +19,10 @@ test_integration_job:
     - echo 'Integration Testing 2'
 
 deploy_job:
-  stage: deploy
+  stage: review
   script:
     - echo 'Deploy'
+  environment:
+    name: dev
+    url: http://104.199.11.69
 
