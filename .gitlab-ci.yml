@@ -2,6 +2,8 @@ stages:
   - build
   - test
   - review
+  - stage
+  - production
 
 build_job:
   stage: build
@@ -25,4 +27,22 @@ deploy_job:
   environment:
     name: dev
     url: http://104.199.11.69
+
+staging:
+  stage: stage
+  when: manual
+  script:
+    - echo 'Deploy'
+  environment:
+    name: stage
+    url: https://beta.example.com
+
+production:
+  stage: production
+  when: manual
+  script:
+    - echo 'Deploy'
+  environment:
+    name: production
+    url: https://example.com
 
