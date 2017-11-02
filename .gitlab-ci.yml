@@ -5,22 +5,30 @@ stages:
   - stage
   - production
 
-build_job:
+build:
   stage: build
   script:
     - echo 'Building'
 
-test_unit_job:
+test unit:
   stage: test
   script:
     - echo 'Unit Testing 1'
 
-test_integration_job:
+test integration:
   stage: test
   script:
     - echo 'Integration Testing 2'
 
-deploy_job:
+dev:
+  stage: review
+  script:
+    - echo ‘Deploy to Dev'
+  environment:
+    name: dev
+    url: http://dev.example.com
+
+branch review:
   stage: review
   script:
     - echo "Deploy to $CI_ENVIRONMENT_SLUG"
@@ -31,13 +39,8 @@ deploy_job:
     - branches
   except:
     - master
-  script:
-    - echo 'Deploy'
-  environment:
-    name: dev
-    url: http://104.199.11.69
 
-staging:
+stage:
   stage: stage
   when: manual
   only:
