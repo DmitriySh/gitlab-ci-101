@@ -23,7 +23,7 @@ test integration:
 dev:
   stage: review
   script:
-    - echo ‘Deploy to Dev'
+    - echo 'Deploy to Dev'
   environment:
     name: dev
     url: http://dev.example.com
@@ -61,4 +61,3 @@ production:
   environment:
     name: production
     url: https://example.com
-
