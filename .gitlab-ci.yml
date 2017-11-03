@@ -26,7 +26,7 @@ dev:
     - echo 'Deploy to Dev'
   environment:
     name: dev
-    url: http://dev.example.com
+    url: http://dev.example.com # define GitLab CI to use external URL for this job
 
 branch review:
   stage: review
@@ -42,22 +42,23 @@ branch review:
 
 stage:
   stage: stage
-  when: manual
+  when: manual # run job only manual from ui of GitLab CI
   only:
-    - /^\d+\.\d+.\d+/
+    - /^\d+\.\d+.\d+/ # filter the commits match the pattern of tags (example: tag: 2.4.10)
   script:
-    - echo 'Deploy'
+    - echo 'Deploy to Stage'
   environment:
     name: stage
-    url: https://beta.example.com
+    url: https://beta.example.com # define GitLab CI to use external URL for this job
 
 production:
   stage: production
-  when: manual
+  when: manual # run job only manual from ui of GitLab CI
   only:
-    - /^\d+\.\d+.\d+/
+    - /^\d+\.\d+.\d+/ # filter the commits match the pattern of tags (example: tag: 2.4.10)
   script:
-    - echo 'Deploy'
+    - echo 'Deploy to Production'
   environment:
     name: production
-    url: https://example.com
+    url: https://example.com # define GitLab CI to use external URL for this job
+
