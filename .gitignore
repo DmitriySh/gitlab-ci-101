@@ -1,0 +1,13 @@
+# macOS template
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# JetBrains template
+out/
+.idea/
+*.iml
+*.iws
+*.ipr
+.idea_modules/
+
