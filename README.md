@@ -425,8 +425,9 @@ production:
 
 ```
 
-=======  
-If you want to reset user password, enable authentication config or restart all components of [GitLab CI](https://about.gitlab.com)
+### gitlab-rails
+
+ - If you want to reset user password, enable authentication config or restart all components of [GitLab CI](https://about.gitlab.com)
  use console `gitlab-rails`:
 ```bash
 home: ~$ docker-machine ssh gitlab-ci
