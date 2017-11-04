@@ -242,3 +242,209 @@ gem 'rack-test'
  - See that runner is not active for project `reddit`: `CI/CD` -> `Pipelines`, status = pending
  - Let's fix it and run runner: `Settings` -> `CI/CD` -> `Runners settings` -> `Enable for this project`
  - All next changes will use `Runner` and run test phase in pipeline
+
+## Homework 20
+
+ - Get ready to deploy [GitLab CI](https://about.gitlab.com) environment from Docker in hw 19
+ - File `.gitlab-ci.yml` defines pipeline stages: `Build`, `Test` and `Review`. 
+ Let's edit `Review` stage in `.gitlab-ci.yml` and define `dev` environment
+```bash
+stages:
+  - build
+  - test
+  - review
+
+build:
+  stage: build
+  script:
+    - echo 'Building'
+
+test unit:
+  stage: test
+  script:
+    - echo 'Unit Testing 1'
+
+test integration:
+  stage: test
+  script:
+    - echo 'Integration Testing 2'
+
+dev:
+  stage: review
+  script:
+    - echo 'Deploy to Dev'
+  environment:
+    name: dev
+    url: http://dev.example.com # define GitLab CI to use external URL for this job
+```
+
+ - You can look here `CI/CD` -> `Environments` = `dev`
+ - Add new pipeline stages: `stage` and `production`: 
+   - The new stages do sensitive actions and let's to use manual control
+   - Use tagging with number version in name to add stages `stage` and `production` in pipeline
+ ```bash
+stages:
+  - build
+  - test
+  - review
+  - stage
+  - production  
+...
+
+staging:
+  stage: stage
+  when: manual
+  only:
+    - /^\d+\.\d+.\d+/
+  script:
+    - echo 'Deploy'
+  environment:
+    name: stage
+    url: https://beta.example.com
+
+production:
+  stage: production
+  when: manual
+  only:
+    - /^\d+\.\d+.\d+/
+  script:
+    - echo 'Deploy'
+  environment:
+    name: production
+    url: https://example.com
+
+ ```
+
+  - Push project changes to the remote Git repository and look at pipeline stages: 
+  `build`, `test`, `review`; it is not a full pipeline
+  - Create new tag, push changes to the remote Git repository and look at pipeline stages again: 
+  `build`, `test`, `review`, `stage` and `production`; right now it is a full pipeline
+```bash
+$ git tag 2.4.10
+$ git push --tags
+Total 0 (delta 0), reused 0 (delta 0)
+To http://104.199.11.69/homework/gitlab-ci-01-homework.git
+ * [new tag]         2.4.10 -> 2.4.10
+```
+
+  - [GitLab CI](https://about.gitlab.com) might have a dynamic environment for each feature/branch. 
+  It is very useful to get a separate environment for testing from main branch. 
+  Let's define new job with variables for each branch except `master`.
+```bash
+...
+branch review:
+  stage: review
+  script:
+    - echo "Deploy to $CI_ENVIRONMENT_SLUG"
+  environment:
+    name: branch/$CI_COMMIT_REF_NAME
+    url: http://$CI_ENVIRONMENT_SLUG.example.com
+  only:
+    - branches
+  except:
+    - master
+...
+```
+
+ - Create two new branches, for example `feature/issue-001` and `feature/issue-002` 
+ and push them to the remote Git repository
+ ```bash
+$ git branch
+  feature/issue-001
+  feature/issue-002
+* master
+ ``` 
+
+ -  `CI/CD` -> `Environments`, open directory `branch` to look at our branches
+ 
+ - Example file
+```bash
+stages:
+  - build
+  - test
+  - review
+  - stage
+  - production
+
+build:
+  stage: build
+  script:
+    - echo 'Building'
+
+test unit:
+  stage: test
+  script:
+    - echo 'Unit Testing 1'
+
+test integration:
+  stage: test
+  script:
+    - echo 'Integration Testing 2'
+
+dev:
+  stage: review
+  script:
+    - echo 'Deploy to Dev'
+  environment:
+    name: dev
+    url: http://dev.example.com # define GitLab CI to use external URL for this job
+
+branch review:
+  stage: review
+  script:
+    - echo "Deploy to $CI_ENVIRONMENT_SLUG"
+  environment:
+    name: branch/$CI_COMMIT_REF_NAME
+    url: http://$CI_ENVIRONMENT_SLUG.example.com
+  only:
+    - branches
+  except:
+    - master
+
+stage:
+  stage: stage
+  when: manual # run job only manual from ui of GitLab CI
+  only:
+    - /^\d+\.\d+.\d+/ # filter the commits match the pattern of tags (example: tag: 2.4.10)
+  script:
+    - echo 'Deploy to Stage'
+  environment:
+    name: stage
+    url: https://beta.example.com # define GitLab CI to use external URL for this job
+
+production:
+  stage: production
+  when: manual # run job only manual from ui of GitLab CI
+  only:
+    - /^\d+\.\d+.\d+/ # filter the commits match the pattern of tags (example: tag: 2.4.10)
+  script:
+    - echo 'Deploy to Production'
+  environment:
+    name: production
+    url: https://example.com # define GitLab CI to use external URL for this job
+
+```
+
+=======  
+If you want to reset user password, enable authentication config or restart all components of [GitLab CI](https://about.gitlab.com)
+ use console `gitlab-rails`:
+```bash
+home: ~$ docker-machine ssh gitlab-ci
+
+docker-user@gitlab-ci:~$ sudo -i
+root@gitlab-ci:~# docker ps
+root@gitlab-ci:~# docker exec -it <gitlab-ce_docker_id> /bin/bash
+root@gitlab:/# gitlab-rails console
+
+irb(main):001:0> ApplicationSetting.last.update_attributes(password_authentication_enabled: true)
+
+irb(main):002:0> user = User.where(id: 1).first
+irb(main):003:0> user.password = 'secret_pass'
+irb(main):004:0> user.password_confirmation = 'secret_pass'
+irb(main):005:0> user.save!
+
+irb(main):006:0> quit
+
+root@gitlab:/# gitlab-ctl restart
+```
+
