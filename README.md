@@ -62,7 +62,7 @@ root@gitlab-ci:~# docker-compose -f /srv/gitlab/docker-compose.yml up -d
 root@gitlab-ci:~# docker-compose -f /srv/gitlab/docker-compose.yml logs
 ```
 
- - Open [http://\<your-vm-ip\>](http://\<gce-vm-ip\>) and create new administrative `root` account
+ - Open [http://\<gce-vm-ip\>](http://\<gce-vm-ip\>) and create new administrative `root` account
  - Authorized like `root` and login in GitLab CI
  - Nobody should not sign up in GitLab except you. Let's disable this option in configuration: `Admin area` -> `Settings` -> `Sign-up Restrictions` -> `Sign-up enabled` = false -> `Save`
 
