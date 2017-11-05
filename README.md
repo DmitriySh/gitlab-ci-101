@@ -16,7 +16,7 @@ DevOps course, practices with [Google Cloud Platform](https://cloud.google.com/)
 --google-open-port 80 \
 --google-open-port 443 \
 --google-machine-image $(gcloud compute images list --filter ubuntu-1604-lts --uri) \
-gitlab-ci
+<docker_instance_name>
 
 ~$ eval $(docker-machine env <docker_instance_name>)
 ```
@@ -45,7 +45,7 @@ web:
   hostname: 'gitlab.example.com'
   environment:
     GITLAB_OMNIBUS_CONFIG: |
-      external_url 'http://<YOUR-VM-IP>'
+      external_url 'http://<gce-vm-ip>'
   ports:
     - '80:80'
     - '443:443'
@@ -62,13 +62,13 @@ root@gitlab-ci:~# docker-compose -f /srv/gitlab/docker-compose.yml up -d
 root@gitlab-ci:~# docker-compose -f /srv/gitlab/docker-compose.yml logs
 ```
 
- - Open [http://\<your-vm-ip\>](http://\<your-vm-ip\>) and create new administrative `root` account
+ - Open [http://\<your-vm-ip\>](http://\<gce-vm-ip\>) and create new administrative `root` account
  - Authorized like `root` and login in GitLab CI
  - Nobody should not sign up in GitLab except you. Let's disable this option in configuration: `Admin area` -> `Settings` -> `Sign-up Restrictions` -> `Sign-up enabled` = false -> `Save`
 
  - Any project is a part of some group, let's create a new group: `Groups` -> `Create group`
 ```bash
-   Group path: http://<your-vm-ip>/homework
+   Group path: http://<gce-vm-ip>/homework
    Group name: homework
    Description: 'DevOps course, homework 19'
    Visibility Level: private
@@ -76,14 +76,14 @@ root@gitlab-ci:~# docker-compose -f /srv/gitlab/docker-compose.yml logs
 
  - Create new project: `New project` -> `Create project`
 ```bash
-   Project path: http://<your-vm-ip>/gitlab-ci-01
-   Project name: gitlab-ci-01-homework
+   Project path: http://<gce-vm-ip>/gitlab-ci-101
+   Project name: gitlab-ci-101-homework
    Visibility Level: private
 ```
 
  - Clone your project `gitlab-ci-01` and make first commit
 ```bash
-~$ git clone http://<your-vm-ip>/homework/gitlab-ci-01.git
+~$ git clone http://<gce-vm-ip>/homework/gitlab-ci-101.git
 ~$ touch README.md
 ~$ git add README.md
 ~$ git status
@@ -144,9 +144,9 @@ gitlab-ci:~#  docker exec -it gitlab-runner gitlab-runner register
 Running in system-mode.
 
 Please enter the gitlab-ci coordinator URL (e.g. https://gitlab.com/):
-http://<your-vm-ip>
+http://<gce-vm-ip>
 Please enter the gitlab-ci token for this runner:
-fctLK91ibydMHdbJxRn9
+<gitlab-token>
 Please enter the gitlab-ci description for this runner:
 [18eeb3ad5ab8]: gitlab-ci-runner
 Please enter the gitlab-ci tags for this runner (comma separated):
@@ -169,7 +169,7 @@ Runner registered successfully. Feel free to start it, but if it's running alrea
    
  - Create new project `reddit` in group `homework`: `New project` -> `Create project`
 ```bash
-Project path: http://<your-vm-ip>/reddit
+Project path: http://<gce-vm-ip>/reddit
 Project name: reddit
 Description: Monolith application from Artemmkin
 Visibility Level: private
@@ -178,7 +178,7 @@ Visibility Level: private
 ```bash
 ~$ git clone https://github.com/Artemmkin/reddit.git artemmkin-reddit
 ~$ cd artemmkin-reddit/
-~$ git remote add gitlab http://<your-vm-ip>/homework/reddit.git
+~$ git remote add gitlab http://<gce-vm-ip>/homework/reddit.git
 ~$ git push -u gitlub monolith
 ```
 
@@ -323,7 +323,7 @@ production:
 $ git tag 2.4.10
 $ git push --tags
 Total 0 (delta 0), reused 0 (delta 0)
-To http://104.199.11.69/homework/gitlab-ci-01-homework.git
+To http://<gce-vm-ip>/homework/gitlab-ci-101-homework.git
  * [new tag]         2.4.10 -> 2.4.10
 ```
 
@@ -430,7 +430,7 @@ production:
  - If you want to reset user password, enable authentication config or restart all components of [GitLab CI](https://about.gitlab.com)
  use console `gitlab-rails`:
 ```bash
-home: ~$ docker-machine ssh gitlab-ci
+home: ~$ docker-machine ssh <docker_instance_name>
 
 docker-user@gitlab-ci:~$ sudo -i
 root@gitlab-ci:~# docker ps
