@@ -163,10 +163,10 @@ alpine:latest
 Runner registered successfully. Feel free to start it, but if it's running already the config should be automatically reloaded!
 ```
 
- - Runner is available and get ready: 
+ - Runner is available and get ready:
    - `Settings` -> `CI/CD` -> `Runners settings`, Runners activated for this project
    - `CI/CD` -> `Pipelines`, status = passed
-   
+
  - Create new project `reddit` in group `homework`: `New project` -> `Create project`
 ```bash
 Project path: http://<gce-vm-ip>/reddit
@@ -246,7 +246,7 @@ gem 'rack-test'
 ## Homework 20
 
  - Get ready to deploy [GitLab CI](https://about.gitlab.com) environment from Docker in hw 19
- - File `.gitlab-ci.yml` defines pipeline stages: `Build`, `Test` and `Review`. 
+ - File `.gitlab-ci.yml` defines pipeline stages: `Build`, `Test` and `Review`.
  Let's edit `Review` stage in `.gitlab-ci.yml` and define `dev` environment
 ```bash
 stages:
@@ -279,7 +279,7 @@ dev:
 ```
 
  - You can look here `CI/CD` -> `Environments` = `dev`
- - Add new pipeline stages: `stage` and `production`: 
+ - Add new pipeline stages: `stage` and `production`:
    - The new stages do sensitive actions and let's to use manual control
    - Use tagging with number version in name to add stages `stage` and `production` in pipeline
  ```bash
@@ -288,7 +288,7 @@ stages:
   - test
   - review
   - stage
-  - production  
+  - production
 ...
 
 staging:
@@ -315,9 +315,9 @@ production:
 
  ```
 
-  - Push project changes to the remote Git repository and look at pipeline stages: 
+  - Push project changes to the remote Git repository and look at pipeline stages:
   `build`, `test`, `review`; it is not a full pipeline
-  - Create new tag, push changes to the remote Git repository and look at pipeline stages again: 
+  - Create new tag, push changes to the remote Git repository and look at pipeline stages again:
   `build`, `test`, `review`, `stage` and `production`; right now it is a full pipeline
 ```bash
 $ git tag 2.4.10
@@ -327,8 +327,8 @@ To http://<gce-vm-ip>/homework/gitlab-ci-101-homework.git
  * [new tag]         2.4.10 -> 2.4.10
 ```
 
-  - [GitLab CI](https://about.gitlab.com) might have a dynamic environment for each feature/branch. 
-  It is very useful to get a separate environment for testing from main branch. 
+  - [GitLab CI](https://about.gitlab.com) might have a dynamic environment for each feature/branch.
+  It is very useful to get a separate environment for testing from main branch.
   Let's define new job with variables for each branch except `master`.
 ```bash
 ...
@@ -346,17 +346,17 @@ branch review:
 ...
 ```
 
- - Create two new branches, for example `feature/issue-001` and `feature/issue-002` 
+ - Create two new branches, for example `feature/issue-001` and `feature/issue-002`
  and push them to the remote Git repository
  ```bash
 $ git branch
   feature/issue-001
   feature/issue-002
 * master
- ``` 
+ ```
 
  -  `CI/CD` -> `Environments`, open directory `branch` to look at our branches
- 
+
  - Example file
 ```bash
 stages:
